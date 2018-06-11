@@ -1,0 +1,114 @@
+<head>
+  <title>SteamSkin - Library</title>
+</head>
+<div class="d-flex">
+  <app-friends-sidebar></app-friends-sidebar>
+  <div class="flex-grow main-panel">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="nav-item">
+        <button class="btn btn-info center-text-vertical" (click)="refreshGameList(true)"><i
+          class="material-icons">refresh</i>Refresh
+        </button>
+      </div>
+      <span class="nav-item ml-2">Display Size&nbsp;</span>
+      <div class="slidecontainer nav-item mr-2">
+        <input type="range" min="0" max="2" value="0" class="slider" [(ngModel)]="getSavedSettings().displaySize"
+               (change)="saveSettings()">
+      </div>
+      <app-settings class="nav-item" (onSaveAction)="refreshGameList(true)"></app-settings>
+      <div class="pretty p-switch p-fill nav-item mx-2"
+           (change)="setTheme(getSavedSettings().darkMode?'dark':'light')">
+        <input type="checkbox" [(ngModel)]="getSavedSettings().darkMode"/>
+        <div class="state">
+          <label>{{getSavedSettings().darkMode?'Dark':'Light'}}</label>
+        </div>
+      </div>
+      <app-loading-spinner [show]="isLoading" class="nav-item mx-2"></app-loading-spinner>
+    </nav>
+    <h5 class="center-text-vertical section-header" (click)="showInstalled=!showInstalled">Installed
+      ({{getSortedGameList(games,true).length}})&nbsp;<i
+        class="material-icons">keyboard_arrow_{{!showInstalled?'up':'down'}}</i>
+    </h5>
+    <div class="card-deck px-3" *ngIf="showInstalled">
+      <app-game-card *ngFor="let g of getSortedGameList(games,true)" (onClickAction)="setSelectedGame($event)"
+                     [gameInfo]="g"
+                     [displaySize]="getSavedSettings().displaySize"
+                     [ngClass]="{'game-card':true,'game-card-small':getSavedSettings().displaySize==1,'game-card-large':getSavedSettings().displaySize==0,'game-card-list':getSavedSettings().displaySize==2}"></app-game-card>
+    </div>
+    <hr/>
+    <h5 class="center-text-vertical section-header" (click)="showAvailable=!showAvailable">Available
+      ({{getSortedGameList(games,false).length}})&nbsp;<i
+        class="material-icons">keyboard_arrow_{{!showAvailable?'up':'down'}}</i>
+    </h5>
+    <div class="card-deck px-3" *ngIf="showAvailable">
+      <app-game-card *ngFor="let g of getSortedGameList(games,false)" (onClickAction)="setSelectedGame($event)"
+                     [gameInfo]="g"
+                     [displaySize]="getSavedSettings().displaySize"
+                     [ngClass]="{'game-card':true,'game-card-small':getSavedSettings().displaySize==1,'game-card-large':getSavedSettings().displaySize==0,'game-card-list':getSavedSettings().displaySize==2}"></app-game-card>
+    </div>
+    <hr/>
+    <div [ngClass]="{'app-detail-drawer':true,'app-detail-drawer-hidden':!showDrawer,'bg-light':true}">
+      <div *ngIf="selectedGame" [style.height]="'100%'">
+        <img class="flex-stay img-fluid" [src]="selectedGame.header_image"/>
+        <button class="btn btn-danger close-button center-text-vertical" (click)="setSelectedGame(undefined)"><i
+          class="material-icons">arrow_forward</i>
+        </button>
+        <div class="flex-stay px-2">
+          <div *ngIf="selectedGame.isInstalled()" class="app-detail-drawer-button-bar">
+            <button class="btn btn-primary" (click)="launch()">Launch</button>
+            <button class="btn btn-light long-button center-text-vertical" title="Open game folder"
+                    (click)="openExplorer(selectedGame)">
+              <i class="material-icons">folder_open</i>
+            </button>
+            <span class="center-text-vertical mx-2" [title]="selectedGame.rawInfo.AppState.playtime_forever+' minutes'"><i
+              class="material-icons">timer</i>&nbsp;{{getFriendlyPlayTime()}}h</span>
+          </div>
+          <div *ngIf="!selectedGame.isInstalled()" class="app-detail-drawer-button-bar">
+            <button class="btn btn-primary center-text-vertical" (click)="installGame()"><i
+              class="material-icons">cloud_download</i>&nbsp;Download
+            </button>
+            <span class="center-text-vertical mx-2" [title]="selectedGame.rawInfo.AppState.playtime_forever+' minutes'"><i
+              class="material-icons">timer</i>&nbsp;{{getFriendlyPlayTime()}}h</span>
+          </div>
+          <h1>{{selectedGame.name}}</h1>
+          <hr/>
+        </div>
+        <div class="container-fluid scrollable">
+          <div class="pretty p-switch p-fill mx-2">
+            <input type="checkbox" (change)="saveSettings()"
+                   [(ngModel)]="getSavedSettings().useDetailedDescription"/>
+            <div class="state">
+              <label>{{getSavedSettings().useDetailedDescription?'Detailed':'Short'}} Description</label>
+            </div>
+          </div>
+          <div [innerHTML]="getDescriptionText()" class="detailed-content"></div>
+          <hr/>
+          <h5 class="mt-1 mb-0">Friends who own this game</h5>
+          <div class="friends-bubbles-container" *ngIf="electronService.friendsAppMap">
+            <p *ngIf="getFriendsForApp().length==0">None</p>
+            <img class="rounded-circle" *ngFor="let f of getFriendsForApp()"
+                 [src]="f.avatarfull" [title]="f.getFriendlyFriendName()"
+                 [style.borderColor]="f.getStatusBorder()">
+          </div>
+          <div *ngIf="selectedGame.isInstalled()">
+            <hr/>
+            <button class="btn btn-light long-button center-text-vertical" (click)="openExplorer(selectedGame)">
+              <i class="material-icons">folder_open</i>{{getFriendlyFullPath()}}
+            </button>
+            <div class="row py-3">
+              <p class="text-muted center-text-vertical col-lg-6">
+                <i class="material-icons">pie_chart</i>&nbsp;Size on Disk:&nbsp;
+                <b>{{getFriendlySizeOnDisk()}} MB</b></p>
+              <p class="text-muted center-text-vertical col-lg-6">
+                <i class="material-icons">ondemand_video</i>&nbsp;App ID:&nbsp;
+                <b>{{selectedGame.steam_appid}}</b></p>
+            </div>
+            <button class="btn btn-danger center-text-vertical delete-btn" (click)="deletLocalContent(selectedGame)"><i
+              class="material-icons">warning</i>&nbsp;Uninstall App
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

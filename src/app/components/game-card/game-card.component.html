@@ -1,0 +1,37 @@
+<div class="card card-elevate-anim" *ngIf="displaySize<2" (click)="onClickAction.emit(gameInfo)">
+  <img [src]="gameInfo.header_image" class="card-img-top"/>
+  <div class="card-footer">
+    <h5 class="card-title"
+        [style.fontSize]="displaySize==1?'1em':'1.25em'">{{gameInfo.name}}</h5>
+    <div *ngIf="gameInfo.isInstalled()">
+      <button class="btn btn-primary" (click)="launch()">Launch</button>
+      <button class="btn btn-light long-button center-text-vertical" title="Open game folder"
+              (click)="openExplorer(gameInfo)">
+        <i class="material-icons">folder_open</i>
+      </button>
+    </div>
+    <div *ngIf="!gameInfo.isInstalled()">
+      <button class="btn btn-primary center-text-vertical" (click)="installGame()"><i
+        class="material-icons">cloud_download</i>&nbsp;Download
+      </button>
+    </div>
+  </div>
+</div>
+<div class="card container card-elevate-anim" *ngIf="displaySize==2" (click)="onClickAction.emit(gameInfo)">
+  <div class="row">
+    <div class="col-1 px-0"><img [src]="gameInfo.header_image" class="img-fluid rounded-left"/></div>
+    <h5 class="col-9 card-title-center">{{gameInfo.name}}</h5>
+    <div *ngIf="gameInfo.isInstalled()" class="col-2 p-0 d-flex">
+      <button class="btn btn-light long-button center-text-vertical flex-grow" title="Open game folder"
+              (click)="openExplorer(gameInfo)">
+        <i class="material-icons m-auto">folder_open</i>
+      </button>
+      <button class="btn btn-primary flex-grow" (click)="launch()">Launch</button>
+    </div>
+    <div *ngIf="!gameInfo.isInstalled()" class="col-2 p-0 d-flex">
+      <button class="btn btn-primary center-text-vertical flex-grow" (click)="installGame()"><i
+        class="material-icons">cloud_download</i>&nbsp;Download
+      </button>
+    </div>
+  </div>
+</div>

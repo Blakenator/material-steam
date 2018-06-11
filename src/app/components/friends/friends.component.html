@@ -1,0 +1,84 @@
+<head>
+  <title>SteamSkin - Friends</title>
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-light primary-navbar">
+  <app-settings class="nav-item"></app-settings>
+  <button class="btn btn-warning center-text-vertical" *ngIf="!isConnected" (click)="connect()"><i
+    class="material-icons">security</i>
+  </button>
+  <button *ngIf="isConnected" class="btn btn-primary nav-item" (click)="logout()">Logout</button>
+</nav>
+<div class="d-flex fit-height-navbar">
+  <div class="flex-grow-0 friend-list fit-height">
+    <div class="friends-bubbles-container" *ngIf="gamesService.getFriends(); let friends">
+      <div *ngFor="let f of friends"
+           [ngClass]="{'friend-row':true, 'card-elevate-anim':true,'bg-light':f.steamid==selectedChat}"
+           (click)="setSelectedChat(f.steamid)">
+        <img class="rounded-circle friends-bubble"
+             [src]="f.avatarfull" [title]="f.getFriendlyFriendName()"
+             [style.borderColor]="f.getStatusBorder()">
+        <div class="friend-name my-1 center-text-vertical">
+          <p class="m-0">{{f.personaname}}</p>
+          <small class="text-muted m-0">
+            {{f.getFriendlyFriendName().substring(f.getFriendlyFriendName().indexOf('-')+1)}}
+          </small>
+        </div>
+        <div *ngIf="getUnreadMessages(f.steamid)>0">
+          <div class="badge badge-danger">{{getUnreadMessages(f.steamid)}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-grow-1 bg-light fit-height d-flex flex-column" *ngIf="selectedChat">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light flex-grow-0"
+         *ngIf="getSelectedChatInfo(selectedChat); let chat">
+      <h4 class="nav-item">{{chat.title}}
+        <small class="text-muted">{{chat.subtitle}}</small>
+      </h4>
+    </nav>
+    <div class="chat-messages d-flex flex-column-reverse flex-grow-1">
+      <p class="center-text-vertical" *ngIf="isTyping"><i class="material-icons">border_color</i></p>
+      <div *ngFor="let m of (messages[selectedChat]||[]).slice().reverse()"
+           [ngClass]="{'my-2':true,'me-container':m.steamId==settingsService.settings.steamId,'not-me-container':m.steamId!==settingsService.settings.steamId}">
+        <span class="time-sent" [style.float]="m.steamId==settingsService.settings.steamId?'right':'left'">{{getFriendlyTimeSent(m)}}</span>
+        <div
+          [ngClass]="{'message':true,'me bg-info':m.steamId==settingsService.settings.steamId,'not-me bg-warning':m.steamId!==settingsService.settings.steamId}">
+          <span class="text-light">{{m.message}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="chat-footer flex-grow-0">
+      <div class="input-group">
+        <input [disabled]="isLoading" [(ngModel)]="newMessage" class="form-control" (keyup.enter)="sendNewMessage()">
+        <div class="input-group-append">
+          <button [disabled]="isLoading" class="btn btn-success" (click)="sendNewMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dialog-container" *ngIf="!isConnected">
+  <div class="dialog-window card">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login to use Steam Chat</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">Password
+          <input class=" form-control" [(ngModel)]="password" autofocus type="password">
+        </div>
+        <div class="form-group">Steam Guard code (from app, if enabled)
+          <input class=" form-control guard-code" (keyup.enter)="connect()" [(ngModel)]="guardCode">
+        </div>
+        <p class="center-text-vertical" *ngIf="loginError">
+          <i class="material-icons">error</i>
+          &nbsp;Incorrect password or Steam Guard code
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="connect()" [disabled]="isLoading">Login</button>
+        <app-loading-spinner [show]="isLoading"></app-loading-spinner>
+      </div>
+    </div>
+  </div>
+</div>

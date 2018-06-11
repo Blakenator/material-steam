@@ -1,0 +1,8 @@
+<div class="sidebar">
+  <div class="friends-bubbles-container" *ngIf="gamesService.getFriends(); let friends">
+    <img class="rounded-circle friends-bubble" *ngFor="let f of friends"
+         [src]="f.avatarfull" [title]="f.getFriendlyFriendName()"
+         [style.borderColor]="f.getStatusBorder()">
+  </div>
+  <button (click)="popoutFriendsWindow()" class="center-text-vertical popout-friends btn btn-primary" title="Friends"><i class="material-icons">people</i></button>
+</div>

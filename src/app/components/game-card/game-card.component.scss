@@ -1,0 +1,28 @@
+.card-title-center {
+  margin-bottom: 0;
+  padding: .55em;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.long-button {
+  text-align: center;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.card-title {
+  overflow: hidden;
+  min-height: 3em;
+  max-height: 3em;
+  transition: max-height .5s;
+  padding-bottom: 0;
+}
+
+.card:hover .card-title {
+  max-height: 9em;
+}

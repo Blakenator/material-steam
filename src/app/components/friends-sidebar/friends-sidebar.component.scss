@@ -1,0 +1,38 @@
+@import "../../../styles";
+
+.sidebar {
+  width: 5em;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 100;
+  box-shadow: $material-dialog-shadow;
+}
+
+.friends-bubbles-container {
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 3em);
+}
+
+.friends-bubble {
+  height: 3em;
+  display: block;
+  box-shadow: $material-shadow;
+  margin: .5em auto;
+  border: .2em solid gray;
+  padding: .1em;
+}
+
+.popout-friends {
+  height: 3em;
+  width: 5em;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.popout-friends i {
+  margin: auto;
+}

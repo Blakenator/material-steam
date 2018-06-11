@@ -1,0 +1,141 @@
+@import "../../../styles";
+
+.game-card-small {
+  max-width: 15em;
+}
+
+.game-card-small .card-title {
+  font-size: 1.1em !important;
+}
+
+.game-card-list {
+  width: 100%;
+}
+
+.game-card {
+  transition: all .5s;
+}
+
+.game-card-large {
+  max-width: 25em;
+}
+
+.slidecontainer {
+  width: 10em;
+  margin-bottom: -.5em;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2em;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.app-detail-drawer-hidden {
+  transform: translateX(calc(100% + 2em));
+}
+
+.app-detail-drawer {
+  position: fixed;
+  transition: all .5s;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 35%;
+  box-shadow: $material-dialog-shadow;
+}
+
+.app-detail-drawer > div {
+  display: flex;
+  flex-flow: column;
+}
+
+.flex-stay {
+  flex-grow: 0;
+}
+
+.scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  padding: 0 1em;
+  flex-grow: 1;
+}
+
+.scrollable > div {
+  padding: 1em;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3em;
+  height: 3em;
+}
+
+.long-button {
+  white-space: normal;
+}
+
+.delete-btn {
+  width: 100%;
+}
+
+.section-header {
+  padding: 1em;
+  cursor: pointer;
+  margin: 0;
+}
+
+.app-detail-drawer-button-bar {
+  padding: .5em;
+}
+
+.friends-bubbles-container {
+  max-height: 15em;
+  overflow-y: auto;
+}
+
+.friends-bubbles-container img {
+  height: 3em;
+  display: inline-block;
+  box-shadow: $material-shadow;
+  margin: .5em;
+  border: .2em solid gray;
+  padding: .1em;
+}
+
+.detailed-content {
+  font-size: .75em;
+}
+
+.main-panel {
+  padding-left: 5em;
+  width: 100%;
+}

@@ -1,0 +1,87 @@
+@import "../../../styles";
+
+.friends-bubble {
+  height: 3em;
+  width: 3em;
+  display: inline-block;
+  box-shadow: $material-shadow;
+  margin: .5em;
+  border: .2em solid gray;
+  padding: .1em;
+}
+
+.friend-name {
+  display: inline-block;
+}
+
+.friend-row {
+  cursor: pointer;
+  position: relative;
+}
+
+.friend-list {
+  width: 20em;
+  overflow-y: auto;
+}
+
+.fit-height {
+  height: 100%;
+}
+
+.fit-height-navbar {
+  height: calc(100% - 4.5rem);
+}
+
+.guard-code {
+  text-transform: uppercase;
+  width: 6em;
+}
+
+.message {
+  padding: .5em;
+  border-radius: $border-radius;
+  max-width: 60%;
+  box-shadow: $material-shadow;
+  display: inline-block;
+}
+
+.me {
+  text-align: right;
+}
+
+.not-me {
+  text-align: left;
+}
+
+.me-container {
+  text-align: right;
+}
+
+.not-me-container {
+  text-align: left;
+}
+
+.time-sent {
+  padding: .5em;
+}
+
+.chat-messages {
+  overflow-y: auto;
+}
+
+.primary-navbar {
+  z-index: 10;
+}
+
+.friend-name small {
+  max-width: 19em;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.friend-row .badge{
+  position: absolute;
+  left:.5em;
+  bottom: .5em;
+}
