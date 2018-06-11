@@ -29,7 +29,7 @@
     "bundle": "echo hello",
     "test": "ng test",
     "e2e": "ng e2e",
-    "release": "npm run electron:windows"
+    "release": "npm run build:prod && npm run bundle && npx electron-builder build --windows -p always"
   },
   "dependencies": {
     "browserify": "^16.2.2",
