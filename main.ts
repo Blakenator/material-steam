@@ -8,39 +8,24 @@ import {AppCache} from './shared/AppCache';
 import {SteamMessage} from './shared/SteamMessage';
 import {MessageCache} from './shared/MessageCache';
 import {EChatEntryType, EPersonaState} from './shared/SteamEnums';
+import {autoUpdater} from 'electron-updater';
 
 const opn = require('opn');
-// const log = require('electron-log');
-const hash = require('crypto').createHash('sha1');
-
 const output = fs.createWriteStream('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\out.log');
 const errorOutput = fs.createWriteStream('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\err.log');
-// custom simple logger
 const logger = new console.Console(output, errorOutput);
-// logger.log(JSON.stringify(fs.readdirSync('./node_modules', {encoding: 'utf8'})));
-// logger.log('--------------------');
-// logger.log(JSON.stringify(fs.readdirSync('./', {encoding: 'utf8'})));
-// fs.writeFileSync('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\log.txt', JSON.stringify(fs.readdirSync('./node_modules', {encoding: 'utf8'})));
-// fs.writeFileSync('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\log2.txt', JSON.stringify(fs.readdirSync('./lib', {encoding: 'utf8'})));
 
 process.on('uncaughtException', function (error) {
-//
-//   // fs.writeFileSync('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\log.txt', JSON.stringify(fs.readdirSync('./node_modules', {encoding: 'utf8'})));
-//   // fs.writeFileSync('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\log_error.txt', JSON.stringify(error));
   logger.log(JSON.stringify(error));
-//   // Handle the error
   logger.log(error);
-//   app.quit();
 });
-// const Steam = require('steam-client');
 const SteamUser = require('steam-user');
-// let Steam:any;
-// import * as Steam from './lib/steam';
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
 function createWindow() {
+  autoUpdater.checkForUpdatesAndNotify();
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
