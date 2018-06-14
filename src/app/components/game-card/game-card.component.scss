@@ -5,6 +5,7 @@
 
 .card {
   cursor: pointer;
+  position: relative;
 }
 
 .long-button {
@@ -25,4 +26,10 @@
 
 .card:hover .card-title {
   max-height: 9em;
+}
+
+.discount-badge {
+  position: absolute;
+  top: .5em;
+  left: .5em;
 }

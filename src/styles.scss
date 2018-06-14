@@ -59,6 +59,7 @@ html, body {
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: .4em;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -128,4 +129,16 @@ body {
 
 .modal-content, .modal-footer, .modal-header {
   border: none;
+}
+.image-fit {
+  max-width: 100%;
+  max-height: 100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin: auto;
+  display: block;
 }

@@ -1,8 +1,25 @@
-<div class="sidebar">
+<div [ngClass]="{'sidebar':true,'sidebar-expanded':getSavedSettings().friendsExpanded}">
   <div class="friends-bubbles-container" *ngIf="gamesService.getFriends(); let friends">
-    <img class="rounded-circle friends-bubble" *ngFor="let f of friends"
-         [src]="f.avatarfull" [title]="f.getFriendlyFriendName()"
-         [style.borderColor]="f.getStatusBorder()">
+    <div (click)="setExpanded(true)" class="friends-bubble d-flex card-elevate-anim"
+         [title]="getSavedSettings().friendsExpanded?'':f.getFriendlyFriendName()"
+         *ngFor="let f of friends">
+      <img class="rounded-circle flex-grow-0" [src]="f.avatarfull"
+           [style.borderColor]="f.getStatusBorder()">
+      <div class="friends-bubble-info flex-grow-1">
+        <p>{{f.personaname}}</p>
+        <small class="text-muted">
+          {{f.getFriendlyFriendName().substring(f.getFriendlyFriendName().indexOf('-')+2)}}
+        </small>
+      </div>
+      <button class="btn btn-success flex-grow-1 center-text-vertical" title="Message in steam"
+              (click)="openChatSteam(f)"><i class="material-icons">chat</i></button>
+    </div>
   </div>
-  <button (click)="popoutFriendsWindow()" class="center-text-vertical popout-friends btn btn-primary" title="Friends"><i class="material-icons">people</i></button>
+  <div class="popout-friends btn-group d-flex">
+    <button *ngIf="getSavedSettings().friendsExpanded" (click)="setExpanded(false)"
+            class="flex-grow-0 btn btn-light center-text-vertical"><i
+      class="material-icons">arrow_back</i></button>
+    <button (click)="popoutFriendsWindow()" class="flex-grow-1 center-text-vertical btn btn-primary" title="Friends"><i
+      class="material-icons">people</i></button>
+  </div>
 </div>

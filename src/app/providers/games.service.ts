@@ -40,7 +40,7 @@ export class GamesService {
   refreshGameList(): Promise<GameInfo[]> {
     return new Promise<GameInfo[]>((resolve, reject) => {
       this.electronService.rpc('refreshGameList', [this.settingsService.settings.baseLibraryFolder], (data: GameInfoRaw[]) => {
-        let availableUrl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + this.apiKey + '&steamid=' + this.settingsService.settings.steamId + '&format=json';
+        let availableUrl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + this.apiKey + '&steamid=' + this.settingsService.settings.steamId + '&format=json&include_played_free_games=1';
         this.http.get<{ response: { game_count: number, games: { appid: number, playtime_forever: string, playtime_2weeks: number }[] } }>(availableUrl).toPromise<{ response: { game_count: number, games: { appid: number, playtime_forever: string, playtime_2weeks: number }[] } }>()
           .then((playData) => {
             if (playData.response.game_count > 0) {
@@ -73,7 +73,7 @@ export class GamesService {
       [...this.friends.values()].forEach(x => {
         // console.log(x);
         gets.push(new Promise((resolve1, reject1) => {
-          let availableUrl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + this.apiKey + '&steamid=' + x.steamid + '&format=json';
+          let availableUrl = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + this.apiKey + '&steamid=' + x.steamid + '&format=json&include_played_free_games=1';
           this.http.get<{ response: { game_count: number, games: { appid: number, playtime_forever: string, playtime_2weeks: number }[] } }>(availableUrl).toPromise<{ response: { game_count: number, games: { appid: number, playtime_forever: string, playtime_2weeks: number }[] } }>()
             .then((playData) => {
               if (playData.response.game_count > 0) {
@@ -131,7 +131,7 @@ export class GamesService {
   }
 
   getFriendsForApp(appid: number) {
-    return (this.friendsAppMap[appid] || []).map(x => this.friends.get(x));
+    return ((this.friendsAppMap || {})[appid] || []).map(x => this.friends.get(x));
   }
 
   getFriends() {

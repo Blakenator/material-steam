@@ -1,38 +1,88 @@
 @import "../../../styles";
 
+$sidebar-expanded-width: 20em;
+$sidebar-width: 5em;
+$details-width: 11em;
 .sidebar {
-  width: 5em;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  position: fixed;
+  width: $sidebar-width;
+  transition: width .5s;
   z-index: 100;
+  height: 100vh;
   box-shadow: $material-dialog-shadow;
+}
+
+.sidebar-expanded {
+  width: $sidebar-expanded-width;
+  .friends-bubble-info, .friends-bubble img {
+    margin-top: .5em !important;
+    margin-bottom: .5em !important;
+  }
+  .friends-bubble:hover .friends-bubble-info {
+    max-height: 10em;
+    overflow-y: auto;
+  }
 }
 
 .friends-bubbles-container {
   overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   height: calc(100% - 3em);
 }
 
+.friends-bubble .btn {
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+.friends-bubble:hover .btn {
+  opacity: 1
+}
+
+.friends-bubble-info {
+  transition: max-height .5s, margin .5s;
+  width: $details-width;
+  max-width: $details-width;
+  min-width: $details-width;
+  max-height: 3em;
+  overflow-y: hidden;
+  margin: .25em;
+  p, small {
+    margin-bottom: 0;
+    word-break: break-word;
+  }
+}
+
 .friends-bubble {
-  height: 3em;
-  display: block;
-  box-shadow: $material-shadow;
-  margin: .5em auto;
-  border: .2em solid gray;
-  padding: .1em;
+  cursor: pointer;
+  img {
+    height: 3em;
+    width: 3em;
+    min-width: 3em;
+    display: block;
+    box-shadow: $material-shadow;
+    margin: .25em .75em;
+    border: .2em solid gray;
+    padding: .1em;
+    transition: margin .5s;
+  }
 }
 
 .popout-friends {
   height: 3em;
-  width: 5em;
+  width: $sidebar-width;
   position: fixed;
   bottom: 0;
   left: 0;
+  transition: width .5s;
 }
 
-.popout-friends i {
-  margin: auto;
+.sidebar-expanded .popout-friends {
+  width: $sidebar-expanded-width;
+}
+
+.popout-friends, .friends-bubble {
+  .btn i {
+    margin: auto;
+  }
 }

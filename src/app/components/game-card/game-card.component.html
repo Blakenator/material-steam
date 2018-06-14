@@ -1,10 +1,13 @@
 <div class="card card-elevate-anim" *ngIf="displaySize<2" (click)="onClickAction.emit(gameInfo)">
   <img [src]="gameInfo.header_image" class="card-img-top"/>
+  <span class="badge badge-success mx-1 discount-badge btn" *ngIf="gameInfo&&(gameInfo.price_overview||{}).discount_percent||0>0">{{gameInfo.price_overview.discount_percent}}% off</span>
   <div class="card-footer">
     <h5 class="card-title"
-        [style.fontSize]="displaySize==1?'1em':'1.25em'">{{gameInfo.name}}</h5>
+        [style.fontSize]="displaySize==1?'1em':'1.25em'">{{gameInfo.name}}
+    </h5>
     <div *ngIf="gameInfo.isInstalled()">
-      <button class="btn btn-primary" (click)="launch()">Launch</button>
+      <button class="btn btn-primary center-text-vertical" (click)="launch()"><i class="material-icons">play_arrow</i><span>&nbsp;Launch</span>
+      </button>
       <button class="btn btn-light long-button center-text-vertical" title="Open game folder"
               (click)="openExplorer(gameInfo)">
         <i class="material-icons">folder_open</i>
@@ -26,7 +29,8 @@
               (click)="openExplorer(gameInfo)">
         <i class="material-icons m-auto">folder_open</i>
       </button>
-      <button class="btn btn-primary flex-grow" (click)="launch()">Launch</button>
+      <button class="btn btn-primary center-text-vertical" (click)="launch()"><i class="material-icons">play_arrow</i>&nbsp;Launch
+      </button>
     </div>
     <div *ngIf="!gameInfo.isInstalled()" class="col-2 p-0 d-flex">
       <button class="btn btn-primary center-text-vertical flex-grow" (click)="installGame()"><i

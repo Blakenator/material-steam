@@ -25,6 +25,7 @@ export class GameCardComponent implements OnInit {
   }
 
   openExplorer(g: GameInfo) {
+    console.log(g);
     this.electronService.rpc('openFolder', [g.rawInfo.AppState.fullPath], () => {
       console.log('opened');
     });

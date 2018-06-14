@@ -5,6 +5,7 @@
   <app-friends-sidebar></app-friends-sidebar>
   <div class="flex-grow main-panel">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand nav-item mr-5">Library</a>
       <div class="nav-item">
         <button class="btn btn-info center-text-vertical" (click)="refreshGameList(true)"><i
           class="material-icons">refresh</i>Refresh
@@ -36,7 +37,7 @@
                      [ngClass]="{'game-card':true,'game-card-small':getSavedSettings().displaySize==1,'game-card-large':getSavedSettings().displaySize==0,'game-card-list':getSavedSettings().displaySize==2}"></app-game-card>
     </div>
     <hr/>
-    <h5 class="center-text-vertical section-header" (click)="showAvailable=!showAvailable">Available
+    <h5 class="center-text-vertical section-header" (click)="showAvailable=!showAvailable">Purchased
       ({{getSortedGameList(games,false).length}})&nbsp;<i
         class="material-icons">keyboard_arrow_{{!showAvailable?'up':'down'}}</i>
     </h5>
@@ -49,7 +50,7 @@
     <hr/>
     <div [ngClass]="{'app-detail-drawer':true,'app-detail-drawer-hidden':!showDrawer,'bg-light':true}">
       <div *ngIf="selectedGame" [style.height]="'100%'">
-        <img class="flex-stay img-fluid" [src]="selectedGame.header_image"/>
+        <img class="flex-stay cover-img" [src]="selectedGame.header_image"/>
         <button class="btn btn-danger close-button center-text-vertical" (click)="setSelectedGame(undefined)"><i
           class="material-icons">arrow_forward</i>
         </button>
@@ -62,13 +63,22 @@
             </button>
             <span class="center-text-vertical mx-2" [title]="selectedGame.rawInfo.AppState.playtime_forever+' minutes'"><i
               class="material-icons">timer</i>&nbsp;{{getFriendlyPlayTime()}}h</span>
+            <span class="center-text-vertical mx-2" *ngIf="selectedGame.price_overview">
+              <i class="material-icons">monetization_on</i>&nbsp;{{getFriendlyPriceDisplay()}}&nbsp;
+              <span class="badge badge-success mx-1 discount-badge" *ngIf="(selectedGame.price_overview||{}).discount_percent||0>0">{{selectedGame.price_overview.discount_percent}}% off</span>
+            </span>
           </div>
           <div *ngIf="!selectedGame.isInstalled()" class="app-detail-drawer-button-bar">
             <button class="btn btn-primary center-text-vertical" (click)="installGame()"><i
               class="material-icons">cloud_download</i>&nbsp;Download
             </button>
-            <span class="center-text-vertical mx-2" [title]="selectedGame.rawInfo.AppState.playtime_forever+' minutes'"><i
+            <span class="center-text-vertical mx-2"
+                  [title]="(selectedGame.rawInfo.AppState.playtime_forever||0)+' minutes'"><i
               class="material-icons">timer</i>&nbsp;{{getFriendlyPlayTime()}}h</span>
+            <span class="center-text-vertical mx-2" *ngIf="selectedGame.price_overview">
+              <i class="material-icons">monetization_on</i>&nbsp;{{getFriendlyPriceDisplay()}}&nbsp;
+              <span class="badge badge-success mx-1 discount-badge" *ngIf="(selectedGame.price_overview||{}).discount_percent||0>0">{{selectedGame.price_overview.discount_percent}}% off</span>
+            </span>
           </div>
           <h1>{{selectedGame.name}}</h1>
           <hr/>
@@ -84,14 +94,14 @@
           <div [innerHTML]="getDescriptionText()" class="detailed-content"></div>
           <hr/>
           <h5 class="mt-1 mb-0">Friends who own this game</h5>
-          <div class="friends-bubbles-container" *ngIf="electronService.friendsAppMap">
+          <div class="friends-bubbles-container">
             <p *ngIf="getFriendsForApp().length==0">None</p>
             <img class="rounded-circle" *ngFor="let f of getFriendsForApp()"
                  [src]="f.avatarfull" [title]="f.getFriendlyFriendName()"
                  [style.borderColor]="f.getStatusBorder()">
           </div>
-          <div *ngIf="selectedGame.isInstalled()">
-            <hr/>
+          <hr/>
+          <div *ngIf="selectedGame.isInstalled()" class="installed-game-container">
             <button class="btn btn-light long-button center-text-vertical" (click)="openExplorer(selectedGame)">
               <i class="material-icons">folder_open</i>{{getFriendlyFullPath()}}
             </button>

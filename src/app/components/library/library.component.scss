@@ -67,6 +67,7 @@
   top: 0;
   bottom: 0;
   width: 35%;
+  max-width: 30em;
   box-shadow: $material-dialog-shadow;
 }
 
@@ -120,6 +121,7 @@
 .friends-bubbles-container {
   max-height: 15em;
   overflow-y: auto;
+  padding-bottom: 0 !important;
 }
 
 .friends-bubbles-container img {
@@ -136,6 +138,20 @@
 }
 
 .main-panel {
-  padding-left: 5em;
   width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.installed-game-container {
+  padding-top: 0 !important;
+}
+
+.cover-img {
+  min-width: 100%;
+  object-fit: cover;
+}
+.discount-badge{
+  line-height: inherit;
 }

@@ -116,7 +116,7 @@ export class LibraryComponent implements OnInit {
   }
 
   getFriendlyPlayTime() {
-    return Math.round(this.selectedGame.rawInfo.AppState.playtime_forever / 60 * 10) / 10;
+    return Math.round((this.selectedGame.rawInfo.AppState.playtime_forever || 0) / 60 * 10) / 10;
   }
 
   getFriendlyFullPath() {
@@ -138,6 +138,17 @@ export class LibraryComponent implements OnInit {
   }
 
   getFriendsForApp() {
-    return this.gamesService.getFriendsForApp(+this.selectedGame.steam_appid);
+    return this.gamesService.getFriendsForApp(+this.selectedGame.steam_appid) || [];
+  }
+
+  getFriendlyPriceDisplay() {
+    if (this.selectedGame.price_overview !== undefined) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: this.selectedGame.price_overview.currency
+      }).format(this.selectedGame.price_overview.final / 100);
+    } else {
+      return '';
+    }
   }
 }
