@@ -120,9 +120,9 @@ export class FriendsComponent implements OnInit {
           this.messages[this.selectedChat].push(message);
         }
         console.log('recur4');
-        // this.applicationRef.tick();
         this.newMessage = '';
         this.saveMessageCache();
+        this.cdr.detectChanges();
       } else {
         console.log('message send failed');
       }
@@ -161,7 +161,7 @@ export class FriendsComponent implements OnInit {
     setInterval(() => {
       this.gamesService.refreshFriends().then(() => {
         console.log('recur5');
-        // this.applicationRef.tick();
+        this.cdr.detectChanges();
       });
     }, LibraryComponent.FRIEND_REFRESH_INTERVAL_MS);
   }
