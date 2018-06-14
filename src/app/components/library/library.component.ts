@@ -151,4 +151,16 @@ export class LibraryComponent implements OnInit {
       return '';
     }
   }
+
+  openStore(g: GameInfo) {
+    this.electronService.rpc('openUrl', ['steam://store/' + g.rawInfo.AppState.appid], () => {
+      console.log('launched');
+    });
+  }
+
+  openWorkshop(g: GameInfo) {
+    this.electronService.rpc('openUrl', ['steam://url/SteamWorkshopPage/' + g.rawInfo.AppState.appid], () => {
+      console.log('launched');
+    });
+  }
 }

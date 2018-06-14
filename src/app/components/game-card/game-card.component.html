@@ -6,16 +6,32 @@
         [style.fontSize]="displaySize==1?'1em':'1.25em'">{{gameInfo.name}}
     </h5>
     <div *ngIf="gameInfo.isInstalled()">
-      <button class="btn btn-primary center-text-vertical" (click)="launch()"><i class="material-icons">play_arrow</i><span>&nbsp;Launch</span>
+      <button class="btn btn-primary center-text-vertical" (click)="launch()"><i class="material-icons">play_arrow</i><span *ngIf="displaySize!==1">&nbsp;Launch</span>
       </button>
       <button class="btn btn-light long-button center-text-vertical" title="Open game folder"
               (click)="openExplorer(gameInfo)">
         <i class="material-icons">folder_open</i>
       </button>
+      <button class="btn btn-info long-button center-text-vertical" title="Steam Store"
+              (click)="openStore(selectedGame)" *ngIf="displaySize==0">
+        <i class="material-icons">store</i>
+      </button>
+      <button class="btn btn-warning long-button center-text-vertical" title="Steam Workshop"
+              (click)="openWorkshop(selectedGame)">
+        <i class="fas fa-plug"></i>
+      </button>
     </div>
     <div *ngIf="!gameInfo.isInstalled()">
       <button class="btn btn-primary center-text-vertical" (click)="installGame()"><i
         class="material-icons">cloud_download</i>&nbsp;Download
+      </button>
+      <button class="btn btn-info long-button center-text-vertical" title="Steam Store"
+              (click)="openStore(selectedGame)" *ngIf="displaySize!==1">
+        <i class="material-icons">store</i>
+      </button>
+      <button class="btn btn-warning long-button center-text-vertical" title="Steam Workshop"
+              (click)="openWorkshop(selectedGame)">
+        <i class="fas fa-plug"></i>
       </button>
     </div>
   </div>
@@ -25,7 +41,15 @@
     <div class="col-1 px-0"><img [src]="gameInfo.header_image" class="img-fluid rounded-left"/></div>
     <h5 class="col-9 card-title-center">{{gameInfo.name}}</h5>
     <div *ngIf="gameInfo.isInstalled()" class="col-2 p-0 d-flex">
-      <button class="btn btn-light long-button center-text-vertical flex-grow" title="Open game folder"
+      <button class="btn btn-warning long-button center-text-vertical flex-grow hover-button" title="Steam Workshop"
+              (click)="openWorkshop(selectedGame)">
+        <i class="fas fa-plug"></i>
+      </button>
+      <button class="btn btn-info long-button center-text-vertical flex-grow hover-button" title="Steam Store"
+              (click)="openStore(selectedGame)">
+        <i class="material-icons">store</i>
+      </button>
+      <button class="btn btn-light long-button center-text-vertical flex-grow hover-button" title="Open game folder"
               (click)="openExplorer(gameInfo)">
         <i class="material-icons m-auto">folder_open</i>
       </button>
@@ -33,6 +57,14 @@
       </button>
     </div>
     <div *ngIf="!gameInfo.isInstalled()" class="col-2 p-0 d-flex">
+      <button class="btn btn-warning long-button center-text-vertical flex-grow hover-button" title="Steam Workshop"
+              (click)="openWorkshop(selectedGame)">
+        <i class="fas fa-plug"></i>
+      </button>
+      <button class="btn btn-info long-button center-text-vertical flex-grow hover-button" title="Steam Store"
+              (click)="openStore(selectedGame)" >
+        <i class="material-icons">store</i>
+      </button>
       <button class="btn btn-primary center-text-vertical flex-grow" (click)="installGame()"><i
         class="material-icons">cloud_download</i>&nbsp;Download
       </button>

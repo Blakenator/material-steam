@@ -33,3 +33,12 @@
   top: .5em;
   left: .5em;
 }
+
+.hover-button {
+  transition: opacity .5s;
+  opacity: 0;
+}
+
+.card-elevate-anim:hover .hover-button {
+  opacity: 1;
+}

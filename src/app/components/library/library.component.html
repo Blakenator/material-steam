@@ -61,6 +61,14 @@
                     (click)="openExplorer(selectedGame)">
               <i class="material-icons">folder_open</i>
             </button>
+            <button class="btn btn-info long-button center-text-vertical" title="Steam Store"
+                    (click)="openStore(selectedGame)">
+              <i class="material-icons">store</i>
+            </button>
+            <button class="btn btn-warning long-button center-text-vertical" title="Steam Workshop"
+                    (click)="openWorkshop(selectedGame)">
+              <i class="fas fa-plug"></i>
+            </button>
             <span class="center-text-vertical mx-2" [title]="selectedGame.rawInfo.AppState.playtime_forever+' minutes'"><i
               class="material-icons">timer</i>&nbsp;{{getFriendlyPlayTime()}}h</span>
             <span class="center-text-vertical mx-2" *ngIf="selectedGame.price_overview">
@@ -71,6 +79,14 @@
           <div *ngIf="!selectedGame.isInstalled()" class="app-detail-drawer-button-bar">
             <button class="btn btn-primary center-text-vertical" (click)="installGame()"><i
               class="material-icons">cloud_download</i>&nbsp;Download
+            </button>
+            <button class="btn btn-light long-button center-text-vertical" title="Open in Steam Store"
+                    (click)="openStore(selectedGame)">
+              <i class="material-icons">store</i>
+            </button>
+            <button class="btn btn-light long-button center-text-vertical" title="Open in Steam Store"
+                    (click)="openWorkshop(selectedGame)">
+              <i class="fas fa-plug"></i>
             </button>
             <span class="center-text-vertical mx-2"
                   [title]="(selectedGame.rawInfo.AppState.playtime_forever||0)+' minutes'"><i
