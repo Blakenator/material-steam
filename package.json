@@ -83,5 +83,14 @@
     "wait-on": "2.1.0",
     "webdriver-manager": "12.0.6",
     "zone.js": "0.8.26"
+  },
+  "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Blakenator",
+        "repo": "material-steam"
+      }
+    ]
   }
 }
