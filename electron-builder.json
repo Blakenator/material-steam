@@ -22,9 +22,18 @@
   ],
   "win": {
     "icon": "dist",
-    "publish": ["github"],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Blakenator",
+        "repo": "material-steam"
+      }
+    ],
     "target": [
-      "portable"
+      "nsis",
+      "portable",
+      "7z",
+      "zip"
     ]
   },
   "mac": {
