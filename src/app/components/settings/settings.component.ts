@@ -11,7 +11,8 @@ import {SettingsModel} from '../../../../shared/SettingsModel';
 export class SettingsComponent implements OnInit {
   showSettingsDialog = false;
   tempSettings: SettingsModel;
-  userOptions: { steamid: string, AccountName: string, PersonaName: string }[];
+  userOptions: { steamid: string, AccountName: string, PersonaName: string }[]=[];
+  advanced: boolean;
   @Output() onSaveAction = new EventEmitter<SettingsModel>();
 
   constructor(private electronService: ElectronService, private settingsService: SettingsService) {

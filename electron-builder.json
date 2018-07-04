@@ -34,7 +34,9 @@
       "portable",
       "7z",
       "zip"
-    ]
+    ],
+    "publisherName" : "blakestacks.com",
+    "certificateFile" : "test.pfx"
   },
   "mac": {
     "icon": "dist",

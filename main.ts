@@ -356,10 +356,15 @@ try {
       };
       steamUser.logOn(logOnDetails);
       steamUser.on('error', (err) => {
-        event.sender.send(getReplyChannel(args), [false, {}]);
+        event.sender.send(getReplyChannel(args), [false, {steamGuard: false}]);
       });
-      steamUser.on('steamGuard', (domain, callback) => {
-        callback(args[3]);
+      steamUser.on('steamGuard', (domain, callback, lastCodeWrong) => {
+        event.sender.send(getReplyChannel(args), [false, {steamGuard: true, lastCodeWrong}]);
+        ipcMain.on('steamGuardCode', (event, args) => {
+          callback(args[1]);
+          ipcMain.removeAllListeners('steamGuardCode');
+          event.sender.send(getReplyChannel(['steamGuardCode']), []);
+        });
       });
       steamUser.on('loggedOn', (resp) => {
         steamUser.setPersona(EPersonaState.Online);

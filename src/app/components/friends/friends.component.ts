@@ -27,6 +27,8 @@ export class FriendsComponent implements OnInit {
   newMessage: string;
   isTyping = false;
   typingTimeout;
+  promptSteamGuard = false;
+  lastGuardCodeWrong = false;
 
   constructor(private settingsService: SettingsService,
               private electronService: ElectronService,
@@ -82,20 +84,39 @@ export class FriendsComponent implements OnInit {
     }
     this.isLoading = true;
     this.loginError = false;
+    let accountName;
+    if (this.settingsComponent.userOptions.length === 0) {
+      accountName = this.settingsService.settings.advancedAccountName;
+    } else {
+      accountName = this.settingsComponent.userOptions.find(x => x.steamid === this.settingsService.settings.steamId).AccountName;
+    }
     this.electronService.rpc('connectToSteam',
-      [this.settingsComponent.userOptions.find(x => x.steamid === this.settingsService.settings.steamId).AccountName,
+      [accountName,
         this.password, this.guardCode.toLowerCase()], (args: any[]) => {
         this.isLoading = false;
         if (args[0]) {
           delete(this.password);
           this.chatRooms = args[1];
-          this.isConnected = args[0];
+          this.promptSteamGuard = false;
+          this.isConnected = true;
           this.cdr.detectChanges();
         } else {
-          this.loginError = true;
+          if (args[1].steamGuard) {
+            this.isConnected = true;
+            this.promptSteamGuard = true;
+            this.lastGuardCodeWrong = args[1].lastCodeWrong;
+          } else {
+            this.loginError = true;
+            this.isConnected = false;
+          }
           this.cdr.detectChanges();
         }
       });
+  }
+
+  sendSteamGuardCode() {
+    this.electronService.rpc('steamGuardCode', [this.guardCode], () => {
+    });
   }
 
   public getSelectedChatInfo(selectedChat) {

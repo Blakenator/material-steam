@@ -68,16 +68,35 @@
         <div class="form-group">Password
           <input class=" form-control" [(ngModel)]="password" autofocus type="password">
         </div>
-        <div class="form-group">Steam Guard code (from app, if enabled)
-          <input class=" form-control guard-code" (keyup.enter)="connect()" [(ngModel)]="guardCode">
-        </div>
         <p class="center-text-vertical" *ngIf="loginError">
           <i class="material-icons">error</i>
-          &nbsp;Incorrect password or Steam Guard code
+          &nbsp;Incorrect password
         </p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-success" (click)="connect()" [disabled]="isLoading">Login</button>
+        <app-loading-spinner [show]="isLoading"></app-loading-spinner>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dialog-container" *ngIf="promptSteamGuard">
+  <div class="dialog-window card">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Enter Steam Guard code</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">Steam Guard code
+          <input class=" form-control guard-code" (keyup.enter)="sendSteamGuardCode()" [(ngModel)]="guardCode">
+        </div>
+        <p class="center-text-vertical" *ngIf="lastGuardCodeWrong">
+          <i class="material-icons">error</i>
+          &nbsp;Incorrect Steam Guard code
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="sendSteamGuardCode()" [disabled]="isLoading">Login</button>
         <app-loading-spinner [show]="isLoading"></app-loading-spinner>
       </div>
     </div>
