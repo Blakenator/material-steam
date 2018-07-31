@@ -35,8 +35,8 @@
       "7z",
       "zip"
     ],
-    "publisherName" : "blakestacks.com",
-    "certificateFile" : "test.pfx"
+    "publisherName" : "Blake Stacks",
+    "certificateFile" : "/signing/codesign.pfx"
   },
   "mac": {
     "icon": "dist",
