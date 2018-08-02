@@ -321,7 +321,8 @@ try {
     defaultReply(event, args);
   });
   ipcMain.on('getUsernameOptions', (event, args) => {
-    let userpath = path.join(args[1], '../config/loginusers.vdf');
+    let userpath = path.join(args[2] || args[1], '../config/', 'loginusers.vdf');
+    console.log(userpath);
     if (fs.existsSync(userpath)) {
       fs.readFile(userpath, 'utf8', (err, data) => {
         if (err) {

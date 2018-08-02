@@ -15,14 +15,18 @@
         <div class="form-group">Base Steamapps Folder
           <input class=" form-control" [(ngModel)]="tempSettings.baseLibraryFolder">
         </div>
-        <div class="form-group">Steam Username
+        <div class="form-group">
           <div *ngIf="advanced">
-            <input class="form-control" [(ngModel)]="tempSettings.steamId"/>
-            <input class="form-control" [(ngModel)]="tempSettings.advancedAccountName"/>
+            <label>Steam ID# <input class="form-control" [(ngModel)]="tempSettings.steamId"/></label>
+            <label>Custom Account Name <input class="form-control"
+                                              [(ngModel)]="tempSettings.advancedAccountName"/></label>
+            <label>Base Config Folder <input class="form-control" [(ngModel)]="tempSettings.baseConfigFoldar"/></label>
           </div>
-          <select *ngIf="!advanced" class="form-control" [(ngModel)]="tempSettings.steamId">
-            <option *ngFor="let u of userOptions" [value]="u.steamid">{{u.PersonaName}} ({{u.AccountName}})</option>
-          </select>
+          <label *ngIf="!advanced">Steam Username
+            <select class="form-control" [(ngModel)]="tempSettings.steamId">
+              <option *ngFor="let u of userOptions" [value]="u.steamid">{{u.PersonaName}} ({{u.AccountName}})</option>
+            </select>
+          </label>
           <div class="pretty p-switch p-fill mx-2">
             <input type="checkbox" [(ngModel)]="advanced"/>
             <div class="state">

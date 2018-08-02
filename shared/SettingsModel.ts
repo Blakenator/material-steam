@@ -6,6 +6,7 @@ export class SettingsModel {
   public useDetailedDescription: boolean;
   public friendsExpanded: boolean;
   public advancedAccountName: string;
+  public baseConfigFoldar: string;
 
   constructor(baseLibraryFolder: string = 'C:\\Program Files (x86)\\Steam\\steamapps\\',
               steamId: string = '76561197960435530',
@@ -13,8 +14,10 @@ export class SettingsModel {
               useDetailedDescription: boolean = false,
               displaySize: number = 0,
               friendsExpanded: boolean = true,
-              advancedAccountName: string = '') {
+              advancedAccountName: string = '',
+              baseConfigFolder: string = '') {
     this.baseLibraryFolder = baseLibraryFolder;
+    this.baseConfigFoldar = baseConfigFolder;
     this.steamId = steamId;
     this.darkMode = darkMode;
     this.useDetailedDescription = useDetailedDescription;

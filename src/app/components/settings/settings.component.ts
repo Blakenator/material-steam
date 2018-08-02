@@ -45,7 +45,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private refreshUsernameOptions() {
-    this.electronService.rpc('getUsernameOptions', [this.settingsService.settings.baseLibraryFolder], options => {
+    this.electronService.rpc('getUsernameOptions', [this.settingsService.settings.baseLibraryFolder,this.settingsService.settings.baseConfigFoldar], options => {
       this.userOptions = options;
       if (this.userOptions.length === 1) {
         this.tempSettings.steamId = this.userOptions[0].steamid;
