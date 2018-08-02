@@ -10,6 +10,8 @@ import {MessageCache} from './shared/MessageCache';
 import {EChatEntryType, EPersonaState} from './shared/SteamEnums';
 import {autoUpdater} from 'electron-updater';
 
+const notifier = require('node-notifier');
+const version = require('./package.json');
 const opn = require('opn');
 const output = fs.createWriteStream('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\out.log');
 const errorOutput = fs.createWriteStream('D:\\Users\\blake\\Documents\\bitbucket\\Steam\\app-builds\\err.log');
@@ -24,8 +26,12 @@ let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
+function checkForUpdates() {
+  autoUpdater.checkForUpdates();
+}
+
 function createWindow() {
-  autoUpdater.checkForUpdatesAndNotify();
+  checkForUpdates();
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -110,13 +116,57 @@ function saveLoginInfo(key: any, guardSha: any) {
   fs.writeFileSync(getLoginCachePath(), JSON.stringify({key, guardSha}), {encoding: 'utf8'});
 }
 
-
 try {
+  let updateDownloaded = false;
+  let userInitiatedUpdate = false;
   let steamUser = new SteamUser({promptSteamGuardCode: false});
   let guardSha;
   let loginKey;
   let oldMessages = [];
   let lastMessageCache: MessageCache;
+
+  app.setAppUserModelId("com.blakestacks.material-steam");
+  app.setAsDefaultProtocolClient("material-steam");
+
+  autoUpdater.on('update-not-available', info => {
+    if (userInitiatedUpdate) {
+      notifier.notify({
+        title: "Material Steam",
+        message: 'You\'re currently running the latest version (' + info.version + ')! Enjoy!',
+        icon: './src/favicon.512x512.png'
+      });
+    }
+    userInitiatedUpdate = false;
+  });
+  autoUpdater.on('update-available', info => {
+    if (!updateDownloaded) {
+      notifier.notify({
+        title: "Material Steam",
+        message: 'Version ' + info.version + ' is now available and is being downloaded',
+        icon: './src/favicon.512x512.png'
+      });
+      userInitiatedUpdate = false;
+    }
+  });
+  autoUpdater.on('update-downloaded', info => {
+    if (!updateDownloaded) {
+      notifier.notify({
+        title: "Material Steam",
+        message: 'Version ' + info.version + ' will install the next time you start the app',
+        icon: './src/favicon.512x512.png',
+        wait: true
+      });
+      userInitiatedUpdate = false;
+      updateDownloaded = true;
+    }
+  });
+
+  setInterval(() => {
+    if (!updateDownloaded) {
+      checkForUpdates();
+    }
+  }, 60 * 60 * 1000);
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
@@ -321,22 +371,31 @@ try {
     defaultReply(event, args);
   });
   ipcMain.on('getUsernameOptions', (event, args) => {
-    let userpath = path.join(args[2] || args[1], '../config/', 'loginusers.vdf');
-    console.log(userpath);
-    if (fs.existsSync(userpath)) {
-      fs.readFile(userpath, 'utf8', (err, data) => {
-        if (err) {
-          throw err;
-        }
-        let source = JSON.parse(getJsonFromSpaceFile(data)).users;
-        let users = Object.keys(source).map(x => {
-          return {steamid: x, AccountName: source[x].AccountName, PersonaName: source[x].PersonaName};
-        });
-        event.sender.send(getReplyChannel(args), users);
-      });
-    } else {
-      event.sender.send(getReplyChannel(args), []);
+    let configPath = args[2] || args[1];
+    if (!args[2]) {
+      configPath = path.join(configPath, '../config/');
     }
+    let userpath = path.join(configPath, 'loginusers.vdf');
+    if (!fs.existsSync(userpath)) {
+      dialog.showMessageBox(win, {
+        title: 'Incorrect Config Path',
+        type: 'error',
+        message: 'The config path is incorrect. Please ensure that the folder chosen \n' +
+        'contains a file called \'loginusers.vdf\''
+      });
+      event.sender.send(getReplyChannel(args), []);
+      return;
+    }
+    fs.readFile(userpath, 'utf8', (err, data) => {
+      if (err) {
+        throw err;
+      }
+      let source = JSON.parse(getJsonFromSpaceFile(data)).users;
+      let users = Object.keys(source).map(x => {
+        return {steamid: x, AccountName: source[x].AccountName, PersonaName: source[x].PersonaName};
+      });
+      event.sender.send(getReplyChannel(args), users);
+    });
   });
   ipcMain.on('isSteamConnected', (event, args) => {
     event.sender.send(getReplyChannel(args), steamUser.publicIP !== undefined);
@@ -400,6 +459,14 @@ try {
   ipcMain.on('logout', (event, args) => {
     steamUser.logOff();
     event.sender.send(getReplyChannel(args), false);
+  });
+  ipcMain.on('getVersion', (event, args) => {
+    event.sender.send(getReplyChannel(args), version.version);
+  });
+  ipcMain.on('checkForUpdates', (event, args) => {
+    userInitiatedUpdate = true;
+    checkForUpdates();
+    defaultReply(event, args);
   });
 } catch (e) {
   // Catch Error

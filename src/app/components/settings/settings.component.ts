@@ -11,8 +11,9 @@ import {SettingsModel} from '../../../../shared/SettingsModel';
 export class SettingsComponent implements OnInit {
   showSettingsDialog = false;
   tempSettings: SettingsModel;
-  userOptions: { steamid: string, AccountName: string, PersonaName: string }[]=[];
+  userOptions: { steamid: string, AccountName: string, PersonaName: string }[] = [];
   advanced: boolean;
+  version = '';
   @Output() onSaveAction = new EventEmitter<SettingsModel>();
 
   constructor(private electronService: ElectronService, private settingsService: SettingsService) {
@@ -22,6 +23,14 @@ export class SettingsComponent implements OnInit {
     this.settingsService.loadSettings(() => {
       this.tempSettings = Object.assign(new SettingsModel(), this.settingsService.settings);
       this.refreshUsernameOptions();
+      this.electronService.rpc('getVersion', [], version => {
+        this.version = version;
+      });
+    });
+  }
+
+  checkForUpdates() {
+    this.electronService.rpc('checkForUpdates', [], () => {
     });
   }
 
@@ -45,7 +54,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private refreshUsernameOptions() {
-    this.electronService.rpc('getUsernameOptions', [this.settingsService.settings.baseLibraryFolder,this.settingsService.settings.baseConfigFoldar], options => {
+    this.electronService.rpc('getUsernameOptions', [this.settingsService.settings.baseLibraryFolder, this.settingsService.settings.baseConfigFoldar], options => {
       this.userOptions = options;
       if (this.userOptions.length === 1) {
         this.tempSettings.steamId = this.userOptions[0].steamid;

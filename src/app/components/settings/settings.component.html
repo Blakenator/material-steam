@@ -12,27 +12,47 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group">Base Steamapps Folder
-          <input class=" form-control" [(ngModel)]="tempSettings.baseLibraryFolder">
+        <div>
+          <span>Material Steam v{{version}}</span>
+          <button class="btn btn-primary ml-2" (click)="checkForUpdates()">Check for Updates</button>
+        </div>
+        <div>
+          <label>Base Steamapps Folder
+            <input class="form-control" [(ngModel)]="tempSettings.baseLibraryFolder"/>
+          </label>
+          <label class="btn btn-light">
+            <input class="form-control d-none" type="file" webkitdirectory directory
+                   [(ngModel)]="tempSettings.baseLibraryFolder"/>
+            Browse
+          </label>
         </div>
         <div class="form-group">
-          <div *ngIf="advanced">
-            <label>Steam ID# <input class="form-control" [(ngModel)]="tempSettings.steamId"/></label>
-            <label>Custom Account Name <input class="form-control"
-                                              [(ngModel)]="tempSettings.advancedAccountName"/></label>
-            <label>Base Config Folder <input class="form-control" [(ngModel)]="tempSettings.baseConfigFoldar"/></label>
-          </div>
-          <label *ngIf="!advanced">Steam Username
-            <select class="form-control" [(ngModel)]="tempSettings.steamId">
-              <option *ngFor="let u of userOptions" [value]="u.steamid">{{u.PersonaName}} ({{u.AccountName}})</option>
-            </select>
-          </label>
           <div class="pretty p-switch p-fill mx-2">
             <input type="checkbox" [(ngModel)]="advanced"/>
             <div class="state">
               <label>Advanced</label>
             </div>
           </div>
+          <div *ngIf="advanced">
+            <label>Steam ID# <input class="form-control" [(ngModel)]="tempSettings.steamId"/></label>
+            <label>Account Name <input class="form-control"
+                                              [(ngModel)]="tempSettings.advancedAccountName"/></label>
+            <div>
+              <label>Base Config Folder
+                <input class="form-control" [(ngModel)]="tempSettings.baseConfigFoldar"/>
+              </label>
+              <label class="btn btn-light">
+                <input class="form-control d-none" type="file" webkitdirectory directory
+                       [(ngModel)]="tempSettings.baseConfigFoldar"/>
+                Browse
+              </label>
+            </div>
+          </div>
+          <label *ngIf="!advanced">Steam Username
+            <select class="form-control" [(ngModel)]="tempSettings.steamId">
+              <option *ngFor="let u of userOptions" [value]="u.steamid">{{u.PersonaName}} ({{u.AccountName}})</option>
+            </select>
+          </label>
         </div>
       </div>
       <div class="modal-footer">

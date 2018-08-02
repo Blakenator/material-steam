@@ -1,5 +1,6 @@
 {
-  "productName": "steam-skin",
+  "productName": "Material Steam",
+  "appId": "com.blakestacks.material-steam",
   "directories": {
     "output": "app-builds"
   },
@@ -35,8 +36,8 @@
       "7z",
       "zip"
     ],
-    "publisherName" : "Blake Stacks",
-    "certificateFile" : "/signing/codesign.pfx"
+    "publisherName": "Blake Stacks",
+    "certificateFile": "/signing/codesign.pfx"
   },
   "mac": {
     "icon": "dist",
